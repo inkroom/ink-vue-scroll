@@ -1,11 +1,15 @@
 <template>
-  <div class="ink-scroll-container"  :style="{ height:ink_height}">
+  <div class="ink-scroll-container" :style="{ height:ink_height}">
     <div class="ink-scroll-content" ref="content">
       <!-- 父组件的内容 -->
       <slot>内容</slot>
     </div>
     <!-- 这里是滚动条 -->
-    <div class="ink-scroll-bar-container" :style="{width:bar_width+'px',backgroundColor:bar_color}" ref="bar">
+    <div
+      class="ink-scroll-bar-container"
+      :style="{width:bar_width+'px',backgroundColor:bar_color}"
+      ref="bar"
+    >
       <div
         class="ink-scroll-bar-top"
         @mousedown="startScroll"
@@ -18,6 +22,20 @@
 function getScrollbarWidth(dom) {
   let scrollbarWidth = dom.offsetWidth - dom.clientWidth; //相减
   return scrollbarWidth; //返回滚动条宽度
+}
+//计算滚动条数据
+function caculate(vue){
+
+  vue.$refs.content.style.marginRight =
+      "-" + getScrollbarWidth(vue.$refs.content) + "px";
+
+    //计算高亮的滚动条长度
+
+    //dom可视区域高度占整个整个内容高度的比例应该和滚动条高亮一致
+    let content = vue.$refs.content;
+    vue.bar_height = (content.clientHeight / content.scrollHeight) * 100;
+
+    console.log(vue.bar_height);
 }
 
 function setNotSelect(dom) {
@@ -34,6 +52,8 @@ function setAllowSelect(dom) {
     dom.style["-webkit-user-select"] = "";
   }
 }
+
+let _this = null;
 
 export default {
   name: "ink-scroll",
@@ -53,6 +73,25 @@ export default {
     bar_top_color: {
       type: String,
       default: "#999999"
+    },
+    data: {
+      type: Object,
+      default: {}
+    },
+    array: {
+      type: Array,
+      default: []
+    }
+  },
+  watch: {
+    data: {
+      handler(nv, ov) {
+        caculate(_this);
+      },
+      deep: true
+    },
+    array(nv, ov) {
+      caculate(_this);
     }
   },
   data() {
@@ -72,7 +111,7 @@ export default {
     }
   },
   created() {
-    let _this = this;
+    _this = this;
 
     document.addEventListener("mousemove", function(event) {
       if (_this.scrolling) {
@@ -145,17 +184,20 @@ export default {
   },
   mounted() {
     let _this = this;
+
+  caculate(this);
+
     //隐藏滚动条
-    this.$refs.content.style.marginRight =
-      "-" + getScrollbarWidth(this.$refs["content"]) + "px";
+    // this.$refs.content.style.marginRight =
+    //   "-" + getScrollbarWidth(this.$refs["content"]) + "px";
 
-    //计算高亮的滚动条长度
+    // //计算高亮的滚动条长度
 
-    //dom可视区域高度占整个整个内容高度的比例应该和滚动条高亮一致
-    let content = this.$refs.content;
-    this.bar_height = (content.clientHeight / content.scrollHeight) * 100;
+    // //dom可视区域高度占整个整个内容高度的比例应该和滚动条高亮一致
+    // let content = this.$refs.content;
+    // this.bar_height = (content.clientHeight / content.scrollHeight) * 100;
 
-    console.log(this.bar_height);
+    // console.log(this.bar_height);
 
     //监听尺寸改变事件
     this.$refs.content.addEventListener("resize", function() {

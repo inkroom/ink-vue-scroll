@@ -2,14 +2,14 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './src/main.js',
+  entry: './src/packages/index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
     filename: 'ink-scroll.js',
     library: 'InkScroll',
-    libraryTarget: 'umd',
-    umdNamedDefine: true
+    // libraryTarget: 'umd',
+    // umdNamedDefine: true
   },
   module: {
     rules: [

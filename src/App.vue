@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <div>好多滚动条啊</div>
     <div>好多滚动条啊</div>
     <div>好多滚动条啊</div>
@@ -11,43 +10,11 @@
     <div>好多滚动条啊</div>
     <div>好多滚动条啊</div>
     <div>好多滚动条啊</div>
-    
 
     <ink-scroll ink_height="300px">
       <slot>
         <ul>
-          <li>顶部</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>cs</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>cs</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>cs</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>底部</li>
+          <li v-for="item in li">{{item}}</li>
         </ul>
       </slot>
     </ink-scroll>
@@ -67,16 +34,55 @@
       <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul> -->
+    </ul>-->
   </div>
 </template>
 
 
 <script >
-
 export default {
-   
-}
+  name: "app",
+  data: {
+    li: [
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试",
+      "测试"
+    ]
+  }
+};
 </script>
 <!--
 
@@ -99,7 +105,7 @@ export default {
 
 
 <style>
-#app{
+#app {
   height: 100%;
   padding-left: 40px;
   padding-right: 150px;
