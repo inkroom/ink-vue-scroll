@@ -1,6 +1,6 @@
 <template>
-  <div class="ink-scroll-container" :style="{ height:ink_height}">
-    <div class="content" ref="content">
+  <div class="ink-scroll-container"  :style="{ height:ink_height}">
+    <div class="ink-scroll-content" ref="content">
       <!-- 父组件的内容 -->
       <slot>内容</slot>
     </div>
@@ -176,7 +176,6 @@ export default {
 
 <style>
 .ink-scroll-container {
-  background-color: rgb(162, 186, 209);
   overflow: hidden;
   position: relative;
 }
@@ -195,7 +194,7 @@ export default {
   position: absolute;
   border-radius: 15px;
 }
-.content {
+.ink-scroll-content {
   height: 100%;
   overflow-y: scroll;
 }
