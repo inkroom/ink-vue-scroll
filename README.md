@@ -39,11 +39,12 @@ npm run dev
 
 ### 可以使用的属性
 
-|key|类型|说明|
-|:---|---|
-|bar_widht|Number|滚动条的宽度，不用加单位|
-|bar_color|String|滚动条底部颜色，按照css属性background-color那样些|
-|bar_color|String|滚动条高亮颜色|
+
+| key | 类型 | 说明 | 
+| ---- | ---- | 
+| bar_widht | Number |  滚动条的宽度，不用加单位 |  
+| bar_color | String | 滚动条底部颜色，按照css属性background-color那样些 | 
+| bar_color | String | 滚动条高亮颜色 | 
 
 ## LICENSE
 
