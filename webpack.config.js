@@ -7,7 +7,7 @@ module.exports = {
     path: path.resolve(__dirname, '../music/src/lib/scroll/'),
     publicPath: '/dist/',
     filename: 'ink-scroll.js',
-    library: 'InkScroll',
+	  //library: 'InkScroll',
     // libraryTarget: 'umd',
     // umdNamedDefine: true
   },
