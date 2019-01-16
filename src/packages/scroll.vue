@@ -24,18 +24,18 @@ function getScrollbarWidth(dom) {
   return scrollbarWidth; //返回滚动条宽度
 }
 //计算滚动条数据
-function caculate(vue){
-
+function caculate(vue) {
+  console.log("设置margin=" + getScrollbarWidth(vue.$refs.content));
   vue.$refs.content.style.marginRight =
-      "-" + getScrollbarWidth(vue.$refs.content) + "px";
+    "-" + getScrollbarWidth(vue.$refs.content) + "px";
+  console.log(vue.$refs.content);
+  //计算高亮的滚动条长度
 
-    //计算高亮的滚动条长度
+  //dom可视区域高度占整个整个内容高度的比例应该和滚动条高亮一致
+  let content = vue.$refs.content;
+  vue.bar_height = (content.clientHeight / content.scrollHeight) * 100;
 
-    //dom可视区域高度占整个整个内容高度的比例应该和滚动条高亮一致
-    let content = vue.$refs.content;
-    vue.bar_height = (content.clientHeight / content.scrollHeight) * 100;
-
-    console.log(vue.bar_height);
+  console.log(vue.bar_height);
 }
 
 function setNotSelect(dom) {
@@ -74,25 +74,24 @@ export default {
       type: String,
       default: "#999999"
     },
-    data: {
-      type: Object,
-      default: {}
-    },
-    array: {
-      type: Array,
-      default: []
+    scroll:{
+      type:Number,
+      default:1
     }
+    // render: {
+    //   type: Number,
+    //   default: 0
+    // }
   },
   watch: {
-    data: {
-      handler(nv, ov) {
-        caculate(_this);
-      },
-      deep: true
-    },
-    array(nv, ov) {
+    scroll(nv, ov) {
+      console.log("父组件来的值=" + nv);
       caculate(_this);
     }
+    // render(nv, ov) {
+    //   console.log("nv=" + nv + " ov=" + ov);
+    //   caculate(_this);
+    // }
   },
   data() {
     return {
@@ -112,6 +111,7 @@ export default {
   },
   created() {
     _this = this;
+
 
     document.addEventListener("mousemove", function(event) {
       if (_this.scrolling) {
@@ -185,7 +185,8 @@ export default {
   mounted() {
     let _this = this;
 
-  caculate(this);
+console.log(this.$refs.content);
+    caculate(this);
 
     //隐藏滚动条
     // this.$refs.content.style.marginRight =
@@ -200,17 +201,24 @@ export default {
     // console.log(this.bar_height);
 
     //监听尺寸改变事件
+    this.$refs.content.addEventListener("DOMNodeInserted", function() {
+      caculate(_this);
+    });
+    this.$refs.content.addEventListener("DOMNodeRemoved", function() {
+      //TODO 删除之后计算的滚动条有一些小问题，没有到底
+      caculate(_this);
+    });
+
     this.$refs.content.addEventListener("resize", function() {
-      let content = _this.$refs.content;
-      _this.bar_height = (content.clientHeight / content.scrollHeight) * 100;
+      caculate(_this);
     });
     //监听滚动事件
     this.$refs.content.addEventListener("scroll", function(event) {
-      console.log("滚动了");
       let content = _this.$refs.content;
       _this.top = (content.scrollTop / content.scrollHeight) * 100;
     });
 
+    caculate(_this);
     console.log("滚动条宽度=" + getScrollbarWidth(this.$refs["content"]));
   }
 };

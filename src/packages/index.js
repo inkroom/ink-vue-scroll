@@ -2,6 +2,10 @@ import scroll from './scroll';
 
 const temp = {
     install (Vue, options) {
+        // Vue.extend({
+        //     mixins: [scroll]
+        //   })
+
         Vue.component(scroll.name, scroll)  // vuePayKeyboard.name 组件的name属性
        // 类似通过 this.$xxx 方式调用插件的 其实只是挂载到原型上而已
        // Vue.prototype.$xxx  // 最终可以在任何地方通过 this.$xxx 调用

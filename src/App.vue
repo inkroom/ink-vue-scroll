@@ -1,17 +1,10 @@
 <template>
-  <div id="app">
-    <div>好多滚动条啊</div>
-    <div>好多滚动条啊</div>
-    <div>好多滚动条啊</div>
-    <div>好多滚动条啊</div>
-    <div>好多滚动条啊</div>
-    <div>好多滚动条啊</div>
-    <div>好多滚动条啊</div>
-    <div>好多滚动条啊</div>
-    <div>好多滚动条啊</div>
-    <div>好多滚动条啊</div>
-
-    <ink-scroll ink_height="300px">
+  <div >
+    <!-- <div v-for="item in li">{{item}}</div> -->
+    <button @click="testAdd">{{test}}</button>
+    <button @click="testDelete">删除</button>
+    <button @click="scroll += 1">更新</button>
+    <ink-scroll ink_height="300px" >
       <slot>
         <ul>
           <li v-for="item in li">{{item}}</li>
@@ -19,31 +12,34 @@
       </slot>
     </ink-scroll>
 
-    <!-- <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>-->
+<div>
+  <ink-scroll ink_height="200px" >
+      <slot>
+        <ul>
+          <li>内容固定</li>
+          <li>内容更新</li>
+          <li>内容更新</li>
+          <li>内容更新</li>
+          <li>内容更新</li>
+          <li>内容更新</li>
+          <li>内容更新</li>
+          <li>内容更新</li>
+          <li>内容更新</li>
+          <li>内容更新</li>
+        </ul>
+      </slot>
+    </ink-scroll>
+</div>
   </div>
 </template>
 
 
 <script >
 export default {
-  name: "app",
-  data: {
-    li: [
+  methods:{
+    testAdd(){
+      this.li = [
+      "顶部",
       "测试",
       "测试",
       "测试",
@@ -78,10 +74,18 @@ export default {
       "测试",
       "测试",
       "测试",
-      "测试",
-      "测试"
+      "底部"
     ]
-  }
+    },
+testDelete(){
+  this.li.splice(0, parseInt(this.li.length/2) );
+}
+  },
+  data(){ return {
+    test:'123',
+    li: [],
+    scroll:1
+  }}
 };
 </script>
 <!--

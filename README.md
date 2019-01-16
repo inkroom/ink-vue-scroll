@@ -37,6 +37,12 @@ npm run dev
     </div>
 ```
 
+### changelog
+
+#### 2019-1-16
+
+- 修正内容变化滚动条无变化的bug
+
 ### 可以使用的属性
 
 
@@ -45,6 +51,19 @@ npm run dev
 | bar_widht | Number |  滚动条的宽度，不用加单位 |  
 | bar_color | String | 滚动条底部颜色，按照css属性background-color那样些 | 
 | bar_color | String | 滚动条高亮颜色 | 
+| watch | Number | 用于刷新的值 | 
+
+### 常见问题
+
+#### 如何主动更新滚动条
+
+> 主动使用watch属性，传递父组件的一个data值，更新进度条只需要修改这个值就可以了  
+ 
+ 例如
+ ``` html
+    <ink-scroll :watch="watch"></ink-scroll>
+ ```
+
 
 ## LICENSE
 

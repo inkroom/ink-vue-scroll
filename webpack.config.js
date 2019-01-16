@@ -4,7 +4,7 @@ var webpack = require('webpack')
 module.exports = {
   entry: './src/packages/index.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, '../music/src/lib/scroll/'),
     publicPath: '/dist/',
     filename: 'ink-scroll.js',
     library: 'InkScroll',
