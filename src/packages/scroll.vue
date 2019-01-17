@@ -1,5 +1,5 @@
 <template>
-  <div class="ink-scroll-container"  :style="{ height:ink_height}">
+  <div class="ink-scroll-container" :style="{ height:ink_height}">
     <div class="ink-scroll-content" ref="content">
       <!-- 父组件的内容 -->
       <slot>内容</slot>
@@ -21,117 +21,6 @@
   </div>
 </template>
 <script >
-function getScrollbarWidth(dom) {
-  let scrollbarWidth = dom.offsetWidth - dom.clientWidth; //相减
-  return scrollbarWidth; //返回滚动条宽度
-}
-//计算滚动条数据
-function caculate(vue) {
-  // console.log("设置margin=" + getScrollbarWidth(vue.$refs.content));
-  vue.$refs.content.style.marginRight =
-    "-" + getScrollbarWidth(vue.$refs.content) + "px";
-  // console.log(vue.$refs.content);
-  //计算高亮的滚动条长度
-
-  //dom可视区域高度占整个整个内容高度的比例应该和滚动条高亮一致
-  let content = vue.$refs.content;
-  vue.bar_height = (content.clientHeight / content.scrollHeight) * 100;
-
-  // console.log(vue.bar_height);
-}
-
-function setNotSelect(dom) {
-  if (dom.style["-webkit-user-select"] == "none") {
-    dom.setAttribute("select-none", "true");
-  }
-  dom.style["-webkit-user-select"] = "none";
-}
-function setAllowSelect(dom) {
-  if (dom.getAttribute("select-none")) {
-    //原本就是禁止选中的
-    dom.removeAttribute("select-none");
-  } else {
-    dom.style["-webkit-user-select"] = "";
-  }
-}
-
-function documentMousemove(event) {
-  // console.log('scrol moving');
-  console.log('moving='+_this.$refs.content.innerHTML.substring(0,6));
-  console.log(_this.scrolling);
-  if (_this.scrolling) {
-    // console.log("12312");
-    //正在滚动
-    let bar_height = _this.$refs.bar.height;
-    //判断是否到达底部和顶部
-
-    // console.log("top = " + _this.top);
-
-    // console.log(
-    //   "_this.$refs.bar.children[0].offsetTop = " +
-    //     _this.$refs.bar.children[0].offsetTop
-    // );
-    // // console.log(
-    //   "_this.$refs.bar.children[0].clientHeight = " +
-    //     _this.$refs.bar.children[0].clientHeight
-    // );
-    // console.log(_this.$refs.bar.children[0]);
-    // console.log("bar_height = " + _this.$refs.bar.clientHeight);
-
-    // 通过判断top所能达到的最大值来确定是否到底，使用高度判断因为精度问题会越界
-
-    let max_top = parseFloat(
-      (1 -
-        _this.$refs.bar.children[0].clientHeight /
-          _this.$refs.bar.clientHeight) *
-        100
-    );
-
-    if (_this.top >= 0 && _this.top <= max_top) {
-      //可以拖动
-      // console.log("拖动");
-      _this.top =
-        ((event.pageY - _this.my + _this.sy) / _this.$refs.bar.clientHeight) *
-        100;
-      let content = _this.$refs.content;
-      //滚动
-      //保证不会越界
-      let top = _this.top;
-      if (_this.top > max_top) {
-        _this.top = max_top;
-        top = max_top;
-      }
-      if (_this.top < 0) {
-        _this.top = 0;
-        top = 0;
-      }
-
-      // setNotSelect(_this.$refs.content);
-
-      // console.log((top * content.scrollHeight) / 100);
-      content.scrollTo(content.scrollLeft, (top * content.scrollHeight) / 100);
-    } else {
-      // console.log("出了便捷");
-      let e = document.createEvent('MouseEvents');
-      e.initEvent('mouseup',true,true);
-      documentMouseup(e)
-      _this.scrolling = false;
-
-    }
-  }
-}
-function documentMouseup(event) {
-  console.log(_this.$refs.content.innerHTML.substring(0,6));
-  console.log('mouse up='+_this.scrolling);
-  if (_this.scrolling) {
-    _this.scrolling = false;
-    setAllowSelect(_this.$refs.content);
-  }
-  document.removeEventListener('mousemove',documentMousemove);
-  document.removeEventListener("mouseup", documentMouseup);
-}
-
-let _this = null;
 
 export default {
   name: "ink-scroll",
@@ -163,53 +52,140 @@ export default {
   },
   watch: {
     scroll(nv, ov) {
-      // console.log("父组件来的值=" + nv);
-      caculate(_this);
+      this.caculate();
     },
-    mask(nv,ov){
-      // console.log('修改mask之后 ='+_this.$refs.mask.clientWidth)
-      //  console.log('修改mask之后 ='+_this.$refs.mask.width)
-        // console.log('修改mask之后 ='+_this.$refs.mask.offsetWidth)
+    mask(nv, ov) {
     },
-    scrolling(nv,ov){
-      console.log('scrolling from '+ov+ ' to '+nv);
+    scrolling(nv, ov) {
     }
-    // render(nv, ov) {
-    //   console.log("nv=" + nv + " ov=" + ov);
-    //   caculate(_this);
-    // }
   },
   data() {
     return {
-      mask:false,
+      mask: false,
       scrolling: false,
       top: 0,
       bar_height: 100 //高亮的长度比例，
     };
   },
   methods: {
+    documentMousemove(event) {
+
+      let _this = this;
+      if (this.scrolling) {
+        //正在滚动
+        let bar_height = this.$refs.bar.height;
+        //判断是否到达底部和顶部
+
+
+        // 通过判断top所能达到的最大值来确定是否到底，使用高度判断因为精度问题会越界
+
+        let max_top = parseFloat(
+          (1 -
+            this.$refs.bar.children[0].clientHeight /
+              this.$refs.bar.clientHeight) *
+            100
+        );
+
+        if (this.top >= 0 && this.top <= max_top) {
+          //可以拖动
+          // console.log("拖动");
+          this.top =
+            ((event.pageY - this.my + this.sy) /
+              this.$refs.bar.clientHeight) *
+            100;
+          let content = this.$refs.content;
+          //滚动
+          //保证不会越界
+          let top = this.top;
+          if (_this.top > max_top) {
+            _this.top = max_top;
+            top = max_top;
+          }
+          if (_this.top < 0) {
+            _this.top = 0;
+            top = 0;
+          }
+
+          content.scrollTo(
+            content.scrollLeft,
+            (top * content.scrollHeight) / 100
+          );
+        } else {
+          // console.log("出了便捷");
+          let e = document.createEvent("MouseEvents");
+          e.initEvent("mouseup", true, true);
+          _this.documentMouseup(e);
+          _this.scrolling = false;
+        }
+      }
+    },
+    documentMouseup(event) {
+      if (this.scrolling) {
+        this.scrolling = false;
+        this.setAllowSelect(this.$refs.content);
+      }
+      document.removeEventListener("mousemove", this.documentMousemove);
+      document.removeEventListener("mouseup", this.documentMouseup);
+    },
+    getScrollbarWidth(dom) {
+      let scrollbarWidth = dom.offsetWidth - dom.clientWidth; //相减
+      return scrollbarWidth; //返回滚动条宽度
+    },
+    setNotSelect(dom) {
+      if (dom.style["-webkit-user-select"] == "none") {
+        dom.setAttribute("select-none", "true");
+      }
+      dom.style["-webkit-user-select"] = "none";
+    },
+    setAllowSelect(dom) {
+      if (dom.getAttribute("select-none")) {
+        //原本就是禁止选中的
+        dom.removeAttribute("select-none");
+      } else {
+        dom.style["-webkit-user-select"] = "";
+      }
+    },
+    //计算滚动条数据
+    caculate() {
+      console.log("caculate=" + this.$parent.$el.id);
+      // console.log("设置margin=" + getScrollbarWidth(vue.$refs.content));
+      this.$refs.content.style.marginRight =
+        "-" + this.getScrollbarWidth(this.$refs.content) + "px";
+      // console.log(vue.$refs.content);
+      //计算高亮的滚动条长度
+
+      //dom可视区域高度占整个整个内容高度的比例应该和滚动条高亮一致
+      let content = this.$refs.content;
+      this.bar_height = (content.clientHeight / content.scrollHeight) * 100;
+
+      // console.log(vue.bar_height);
+    },
     startScroll(event) {
       this.scrolling = true;
       this.sy = event.target.offsetTop;
       this.my = event.pageY;
 
-      document.addEventListener("mousemove", documentMousemove);
-      document.addEventListener("mouseup", documentMouseup);
+      document.addEventListener("mousemove", this.documentMousemove);
+      document.addEventListener("mouseup", this.documentMouseup);
 
-  setNotSelect(this.$refs.content)
+      this.setNotSelect(this.$refs.content);
+      console.log("start=" + _this.$parent.$el.id);
 
-
-console.log(this.$refs.content.innerHTML.substring(0,6));
+      console.log(this.$refs.content.innerHTML.substring(0, 6));
       //开启遮罩
       this.mask = true;
-      this.$refs.mask.style.width = (this.$refs.mask.width-this.bar_width)+'px';
-
+      this.$refs.mask.style.width =
+        this.$refs.mask.width - this.bar_width + "px";
     }
   },
   created() {
+    console.log("create 之前");
+    console.log(_this);
+
     _this = this;
 
-console.log(_this);
+    console.log("compose created");
+    console.log(_this);
     // document.addEventListener("mousemove", function(event) {
 
     // });
@@ -219,7 +195,7 @@ console.log(_this);
     let _this = this;
 
     console.log(this.$refs.content);
-    caculate(this);
+    this.caculate();
 
     //隐藏滚动条
     // this.$refs.content.style.marginRight =
@@ -235,24 +211,25 @@ console.log(_this);
 
     //监听尺寸改变事件
     this.$refs.content.addEventListener("DOMNodeInserted", function() {
-      caculate(_this);
+      _this.caculate();
     });
     this.$refs.content.addEventListener("DOMNodeRemoved", function() {
       //TODO 删除之后计算的滚动条有一些小问题，没有到底
-      caculate(_this);
+      _this.caculate();
     });
 
     this.$refs.content.addEventListener("resize", function() {
-      caculate(_this);
+      _this.caculate();
     });
     //监听滚动事件
     this.$refs.content.addEventListener("scroll", function(event) {
+      console.log("conetent scroll= " + _this.$parent.$el.id);
       let content = _this.$refs.content;
       _this.top = (content.scrollTop / content.scrollHeight) * 100;
     });
 
-    caculate(_this);
-    console.log("滚动条宽度=" + getScrollbarWidth(this.$refs["content"]));
+    this.caculate();
+    console.log("滚动条宽度=" + this.getScrollbarWidth(this.$refs.content));
   }
 };
 </script>
